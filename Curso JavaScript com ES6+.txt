@@ -1,0 +1,890 @@
+{{########################################################################}}
+{{#                                                                      #}}
+{{#                     Curso JavaScript com ES6+                        #}}
+{{#                                                                      #}}
+{{########################################################################}}
+                                   ...                                  
+{{########################################################################}}
+{{########################################################################}}
+
+    {{01 – Conceitos do ES6+}}
+
+{{########################################################################}}
+...
+{{01 - Introdução}}
+...
+ES 		- sigla para EcmaScript.
+6+		- é a versão, corresponde ao ano +1
+
+- O ES6 corresponde ao ano de 2015, o ES7 ao de 2016, e assim por diante.
+
+- Geralmente sai um conjunto de regras e normas todo ano.
+
+- Basicamente o EcmaScript é quem decide, quem formula as novas funcionalidades
+da linguagem JavaScript.
+
+- Babel pega o código escrito com as novas funcionalidades, e transpila ele, 
+converter em um código que todos os navegadores entendam.
+
+- ES6 / ES7 / ES8 não são novas funcionalidades do JavaScript, mas são novas
+formas de escrever o JavaScript.
+
+- Antes o JavaScript não existia classes, e a partir do ES6 já tem acesso a 
+classe de forma nativa no JavaScript, e como alguns navegadores não entendem
+essas classe, o Babel converte essas classes para uma sintaxe de função.
+
+Funcionalidades do curso:
+
+- Webpack: é um servidor para conseguimos ter o live reload, para o navegador
+atualizar automaticamente quando é adicionado um novo código, não precisando 
+assim, ficar atualizando a página. Também ajuda a toda vez que um arquivo 
+JavaScript feito com Es6 for alterado, automaticamente já trocar, ativar o Babel
+para ser convertido para que o navegador entenda.
+
+- Classes
+
+- Arrow functions: novo modelo de criar funções anônimas dentro do código.
+
+- Desestruturação: forma de recuperar propriedades de dentro de um obejeto
+e de um array de forma muito mais fácil.
+
+- Rest/spread: formas de manipular as propriedades e informações dentro de
+arrays, duplicar esse conteúdo, repassar de um lugar para o outro sem manter
+referência.
+
+- Import/export: uma das features mais utilizadas nos ES6+, que é a forma de 
+conseguir importar e exportar funcionalidades de um arquivo js para outro,
+sem precisar utilizar várias tags scripts dentro do HTML.
+
+- Async/await: funcionalidade do ES8, fornece uma APi nova, forma nova de 
+trabalhar com programação assincrona dentro do JavaScript, muito mais simples
+e menos verbosa.
+
+{{========================================================================}}
+{{02 - Instalando Node & Yarn}}
+...
+- Yarn é um gerenciador de pacotes do JavaScript, ele vai ser utilizado para 
+conseguir instalar ferramentas de outras pessoas de outros empresas para 
+utilizar as funcionalidades dessa ferramenta tambe´m na nossa aplicação.
+
+{{========================================================================}}
+{{03 - Configurando Babel}}
+...
+- Dentro da raiz do projeto, executar o comando:
+{{$ yarn init}}
+
+- Ele cria um arquivo 'package.json', que vai armazenar as dependências da aplicação.
+- Instalar dependências:
+
+{{$ yarn add @babel/cli}}
+
+- Basicamente essa dependências vai dar a possibilidade para a gente trabalhar 
+com a interface de linha de comando do Babel.
+
+- Um exemplo o yarn é uma interface de linha de comando, assim como o Babel.
+
+{{$ yarn add @babel/preset-env}}
+
+Ele cria um arquivo 'yarn.lock', que não vai ser preciso mexer, é só uma forma de cache,
+e também uma pasta chamada 'node_modeules', ela vai armazenar todas as dependências do projeto.
+
+{{.babelrc}}
+- Arquivo de configurações do Babel.
+
+- O Babel vai ser o cara que vai transformar as features que utiliza com ES6, ES7 e ES8,
+em uma forma com que todos os navegadores entendam e funcione em todos eles.
+
+{{preset-env}}
+- Basicamente, vai entender qual é o ambiente que estamos trabalhando
+no nosso, por exemplo é o browser.
+
+```package.json
+"scripts": {	- são formas de executar comandos pelo terminal que fazem mais de alguma ccoisa.
+	"dev": "babel ./main.js -o ./bundle.js"
+}
+```
+"dev": "babel ./main.js -o ./bundle.js -w"		- o '-w' monitora os arquivos, e já faz o processo de bundle.
+
+{{========================================================================}}
+{{04 - Classes}}
+...
+constructor() {};		- método que vai ser o primeiro método executaado toda 
+					   	  vez que instanciar um novo objeto através dessa classe.
+<script>
+	class List {
+	    constructor() {
+	        this.data = [];
+	    }
+
+	    add(data) {
+	        this.data.push(data);
+	        console.log(this.data);
+	    }
+	}
+
+	class TodoList extends List {
+	    constructor() {
+	        super();        // chama o construtor da classe pai.
+
+	        this.usuario = 'Wesley';
+	    }
+
+	    mostraUsuario() {
+	        console.log(this.usuario);
+	    }
+	}
+
+	var MinhaLista = new TodoList();
+
+
+	document.getElementById('novotodo').onclick = function() {
+	    MinhaLista.add('Novo todo');
+	}
+
+	MinhaLista.mostraUsuario();
+</script>
+
+- Quando definir um método 'static', ele não enxerga o restante da classe,
+ele é basicamente para passar uma informação para ele, e ele retornar outra 
+informação independente da classe.
+<script>
+	class TodoList {
+	    constructor() {
+	        this.todos = [];
+	    }
+
+	    static addTodo() {
+	        this.todos.push('Novo todo');
+	        console.log(this.todos);
+	    }
+	}
+
+	TodoList.addTodo();
+	TodoList.addTodo();
+	TodoList.addTodo();
+	TodoList.addTodo();
+</script>
+
+- Geralmente quando tiver métodos estáticos na classe, nem vai ter 'constructor'.
+
+<script>
+	class Matematica {
+		static soma(a, b) {
+		    return a + b;
+		}
+	}
+
+	console.log(Matematica.soma(1, 2));
+</script>
+
+- Já mostra a soma, porque é um método estático, não precisa definar uma nova classe
+Matematica, e não depende de nenhuma outra informação da classe.
+
+{{========================================================================}}
+{{05 - Const & let}}
+...
+var 	- declaração de variável não muito usada atualmente no JavaScript.
+
+const 	- não pode ter o seu valor reatribuido, mas pode ser mutada.
+<script> // mudatação
+	const usuario = { nome: 'Wesley'};
+	usuario.nome = 'Cleiton';
+	console.log(usuario);
+</script>
+
+let 	- variável de escopo.
+<script>
+	function teste(x) {
+	    let y = 2;
+
+	    if (x > 5) {
+	    	let y = 4;
+	        console.log(x, y);
+	    }
+	}''
+
+	teste(10);		// ele também enxerga o y, porque dentro de cada chave, 
+					// chamamos de escopo dentro do JavaScript.
+
+	// result: 10 2
+</script>
+
+{{========================================================================}}
+{{06 - Operações em array}}
+...
+map()		- percorre o vetor e retorna algo de dentro.
+			  
+<script>
+	const arr = [1,3,4,5,6,9];
+
+	const newArr = arr.map(function(item) {
+	    return item * 2;
+	});
+
+	console.log(newArr);
+
+	//result: [2, 6, 8, 10, 12, 18]
+</script>
+- Ele percorre todo o vetor, cada item dele, e executa ação que precisamos executar.
+
+<script>
+//map()
+
+	const arr = [1,3,4,5,8,9];
+
+	const newArr = arr.map(function(item, index) {
+	    return item + index;
+	});
+
+	console.log(newArr);
+
+	//result: [1, 4, 6, 8, 12, 14]
+
+	//- Ele percorre o vector e soma com o index dele.
+
+//--------------------------------------------------------------------
+
+/*reduce()		- é uma forma de consumirmos todo o vetor e transformar em
+				  uma unica informação/variável, geralmente um número.*/
+
+	const sum = arr.reduce(function(total, next) {
+	    return total + next;
+	});
+
+	console.log(sum);
+
+	// 0    // 1    // 4    // 8    // 13   // 21
+	// +    // +    // +    // +    // +    // +
+	// 1    // 3    // 4    // 5    // 8    // 9
+
+	//result: 30
+
+//--------------------------------------------------------------------
+
+/*- filter()		- filtra valores verdadeiros definidos pela operação criada.*/
+
+	const filter = arr.filter(function(item) {
+	    return item % 2 === 0;		// retorna apenas os itens divisiveis por 2.
+	});
+
+	console.log(filter);        // precisamos que retorne 'True' ou 'False'.
+
+	//result: [4, 8]
+
+//--------------------------------------------------------------------
+
+/*- find()		- utilizado quando queremos verificar se existe alguma informação
+				  dentro do arry, ou se queremos encontrar essa informação.*/
+
+	const find = arr.find(function(item) {
+	    return item === 2;
+	});
+
+	console.log(find);
+
+	//result: 4 (se não encontrar retorna: undefined)
+</script>
+
+{{========================================================================}}
+{{07 - Arrow Functions}}
+...
+- Arrow function consegue salvar código.
+<script>
+	const arr = [1,3,4,5,6];
+
+	const newArr = arr.map(function(item) {
+	    return item * 2;
+	});
+
+	console.log(newArr);
+
+	//result: [2, 6, 8, 10, 12]
+</script>
+
+{{
+- O 'function' sem nome, é considerada anônima
+  e é o melhor local para se utilizar 'Arrow Function' 
+  pode ser substituido por:
+  	'... => ...'
+
+- Quando a função recebe apenas um parâmetro, 
+  o '()' em volta dele pode ser removido: 
+  	'... item => ...'.
+
+- Quando a função retorna apenas uma informação, quando não 
+  são várias linhas, um corpo de função, pode ser colocado a 
+  parte do return depois das flecha, sem o return:
+  	'... => item * 2);'
+}}
+
+<script>
+	//Exemplo de Arrow Function:
+	const newArr = arr.map(item => item * 2);
+
+	console.log(newArr);
+
+	//result: [2, 6, 8, 10, 12]
+</script>
+
+- Callback é uma passagem de função para dentro de uma outra função.
+
+<script>
+//Pode criar funções utilizando constantes.
+	const teste = () => {
+    	return 'teste';
+	};
+
+	console.log(teste());
+
+	//result: teste
+
+//Porém não é recomendado...
+</script>
+
+<script>
+	//Array
+	const teste = () => [1,2,3];	//funciona normal...
+	console.log(teste());		//result: [1,2,3]
+
+	//String
+	const teste = () => 'teste';	//funciona normal...
+	console.log(teste());		//result: teste
+
+	//Variável
+	const teste = () => 3;	//funciona normal...
+	console.log(teste());		//result: 3
+
+	//Objeto
+	const teste = () => { nome: 'Diego' };  //não funciona...
+	console.log(teste());
+
+	//...porque as chaves é utilizada também para o corpo da função.
+	//Então não pode ser utilizado a cave para o objeto
+	//Tem que ser colocado '()' em volta:
+
+	const teste = () => ({ nome: 'Diego' });
+	console.log(teste());		//result: {nome: "Diego"}
+</script>
+
+
+{{========================================================================}}
+{{08 - Valores padrão em parâmetros}}
+...
+<script>
+	function soma(a, b) {
+	    return a + b;
+	};
+
+	console.log(soma(1));	//result: NaN
+	console.log(soma());	//result: NaN
+	//Sem definir um valor padrão, ele retorna 'NaN'.
+
+	function soma(a = 3, b = 6) {
+	    return a + b;
+	};
+
+	console.log(soma(1));	//result: 7
+	console.log(soma());	//result: 9
+
+	//Com Arrow function:
+	const soma = (a = 3, b = 6) => a + b;
+
+	console.log(soma(1));	//result: 7
+	console.log(soma());	//result: 9
+</script>
+
+{{========================================================================}}
+{{09 - Desestruturação}}
+...
+//Modo antigo
+
+<script>
+
+	//Modo antigo.
+	const usuario = {
+	    nome: 'Wesley',
+	    idade: 23,
+	    endereco: {
+	        cidade: 'Rio do Sul',
+	        estado: 'SC',
+	    },
+	};
+
+	const nome = usuario.nome;
+	const idade = usuario.idade;
+	const cidade = usuario.endereco.cidade;
+
+//--------------------------------------------------------------------
+
+	//Conceito de desestruturação.
+	const { nome, idade, endereco: { cidade } } = usuario;
+
+	console.log(nome);
+	console.log(idade);
+	console.log(cidade);
+
+//--------------------------------------------------------------------
+	
+	//Desestruturação nos parâmetros de funções.
+	function mostraNome({ nome, idade }) {
+	    console.log(nome, idade);
+	}
+
+	mostraNome(usuario);
+
+
+</script>
+
+{{========================================================================}}
+{{10 - Operadores rest/spread}}
+...
+- Instalar novo pacote:
+ yarn add @babel/plugin-proposal-object-rest-spread
+
+REST		- serve para pegarmos o resto das propriedades.
+<script>
+	//REST
+
+	const usuario = {
+	    nome: 'Wesley',
+	    idade: '24',
+	    empresa: 'Rocketseat'
+	};
+
+	const { nome, ...resto } = usuario;
+
+	console.log(nome);
+	console.log(resto);
+
+	//result: Wesley
+	//result: {idade: "24", empresa: "Rocketseat"}
+
+	//O nome ficou com o 'Wesley', e resto ficou com todo o resto do objeto.
+
+//--------------------------------------------------------------------
+
+	//REST
+
+	const arr = [1, 2, 3, 4];
+
+	const [ a, b, ...c ] = arr;
+
+	console.log(a);     //result: 1
+	console.log(b);     //result: 2
+	console.log(c);     //result: [3, 4]
+
+//--------------------------------------------------------------------
+
+	//Mais uma utilização do REST operator é para parâmetros de funções.
+
+	//REST
+
+	function soma(...params) {
+	    return params.reduce((total, next) => total + next);
+	}
+
+	console.log(soma(1, 3, 4));
+
+	//result: 8
+
+//--------------------------------------------------------------------
+
+	//REST
+
+	function soma(a, b, ...params) {
+	    return params;
+	}
+
+	console.log(soma(1, 3, 4, 5, 6, 7));
+
+	//result: [4, 5, 6, 7]
+</script>
+
+SPREAD		- faz o papel de propagar, de repassar as informações de um 
+			  objeto ou array, para outra estrutura de dados.
+<script>
+	//SPREAD
+
+	const arr1 = [1, 2, 3];
+	const arr2 = [4, 5, 6];
+
+	const arr3 = [ ...arr1, ...arr2 ];
+
+	console.log(arr3);
+
+	//result: [1, 2, 3, 4, 5, 6]
+
+//--------------------------------------------------------------------
+
+	//SPREAD
+
+	const usuario1 = {
+	    nome: 'Wesley',
+	    idade: '24',
+	    empresa: 'Rocketseat',
+	};
+
+	const usuario2 = { ...usuario1, nome: 'Gabriel' };
+
+	console.log(usuario2);
+
+	//result: {nome: "Gabriel", idade: "24", empresa: "Rocketseat"}
+
+	//Ele vai ter todas as mesmas informações que o 'usuario1', porém o nmoe foi alterado.
+	//Isso é muito utilizado dentro do JavaScript, ainda mais se for utilizar com uma biblioteca,
+	//React ou Vue, vai utilizar muito parte do 'REST' ou 'SPREAD' operator.
+</script>
+
+{{========================================================================}}
+{{11 - Template literals}}
+...
+- Template Literals, é uma forma de incluirmos variáveis 
+dentro de strings dentro do JavaScript, a partir do ES6.
+
+<script>
+	const nome = "Wesley";
+	const idade = "24";
+
+	console.log('Meu nome é ' + nome + ' e tenho ' + idade + ' anos.');
+
+	//Template Literals
+	console.log(`Meu nome é ${nome} e tenho ${idade} anos.`);
+
+	//Isso é a funcionalidade conhecida como Template Literals do ES6, 
+	//e vai ajudar a manipular as variáveis dentro do JavaScript
+</script>
+
+{{========================================================================}}
+{{12 - Object Short Syntax}}
+...
+- Object Short Syntax, ou Sintaxe Curta de Objeto.
+<script>
+	const nome = "Wesley";
+	const idade = "24";
+
+	const usuario1 = {
+	    nome: nome,
+	    idade: idade,
+	    empresa: 'Rocketseat',
+	};
+
+	//No ES6, conhecido como sintaxe curta de objeto no ES6.
+	const usuario = {
+	    nome,
+	    idade,
+	    empresa: 'Rocketseat',
+	};
+
+	console.log(usuario);
+
+	//result: {nome: "Wesley", idade: "24", empresa: "Rocketseat"}
+</script>
+
+{{========================================================================}}
+{{13 - Exercícios}}
+...
+{{########################################################################}}
+
+    {{02 – Webpack Server}}
+
+{{########################################################################}}
+...
+{{01 - Configurando Webpack}}
+...
+- Webpack Como se fosse um serviço que vai nos disponibilizar uma forma de 
+trabalharmos com vários arquivo .js na aplicação.
+
+<script src="package.json">
+{
+  "name": "curso-es6",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.1.0",
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
+    "@babel/preset-env": "^7.5.5",
+    "babel-loader": "^8.0.6",
+    "webpack": "^4.36.1",
+    "webpack-cli": "^3.3.6",
+  },
+  "scripts": {
+    "dev": "webpack --mode=development -w"
+  }
+};
+</script>
+
+<script src="webpack.config.js.json">
+module.exports = {
+    entry: './main.js',
+    output: {
+        path: __dirname,
+        filename: 'bundle.js',
+    },
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader',
+                }
+            }
+        ],
+    },
+};
+</script>
+
+<script src="funcoes.js">
+	export function soma(a, b) {
+		return a + b
+	}
+</script>
+
+<script src="main.js">
+	import { soma } from './funcoes'
+
+	console.log(soma(1, 2));
+</script>
+
+{{========================================================================}}
+{{02 - Import/export}}
+...
+
+<script src="package.json">
+{
+  "name": "curso-es6",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.1.0",
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
+    "@babel/preset-env": "^7.5.5",
+    "babel-loader": "^8.0.6",
+    "webpack": "^4.36.1",
+    "webpack-cli": "^3.3.6",
+  },
+  "scripts": {
+    "dev": "webpack --mode=development -w"
+  }
+};
+</script>
+
+<script src="webpack.config.js.json">
+module.exports = {
+    entry: './main.js',
+    output: {
+        path: __dirname,
+        filename: 'bundle.js',
+    },
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader',
+                }
+            }
+        ],
+    },
+};
+</script>
+
+<script src="funcoes.js">
+	export function soma(a, b) {
+		return a + b
+	}
+
+	export function sub(a, b) {
+		return a - b
+	}
+</script>
+
+<script src="funcoes.js">
+	export default function soma(a, b) {
+		return a + b
+	}
+
+	export function sub(a, b) {
+		return a - b
+	}
+
+	export function mult(a, b) {
+		return a * b
+	}
+</script>script>
+
+<script src="main.js">
+	import { soma, sub } from './funcoes'
+	import { soma as somaFunction, sub } from './funcoes'
+	import soma, { sub } from './funcoes'
+	import * as funcoes from './funcoes'
+	import somaFunction from './funcoes'
+
+	console.log(soma(1, 2));
+	console.log(sub(4, 2));
+	console.log(somaFunction(1, 2));
+	console.log(funcoes.soma(1, 2));
+	console.log(funcoes.sub(4, 2));
+</script>
+
+- export default cada arquivo só pode ter um, é um arquivo que por padrão
+quando importamos aquele arquivo.
+- com o export default pode dar o nome que quiser para a função
+- no mesmo arquivo que tem o export default, pode ter outros várias export comuns
+
+{{========================================================================}}
+{{03 - Webpack Dev Server}}
+...
+<script src="package.json">
+{
+  "name": "curso-es6",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.1.0",
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
+    "@babel/preset-env": "^7.5.5",
+    "babel-loader": "^8.0.6",
+    "webpack": "^4.36.1",
+    "webpack-cli": "^3.3.6",
+    "webpack-dev-server": "^3.7.2"
+  },
+  "scripts": {
+    "dev": "webpack-dev-server --mode=development",
+    "build": "webpack --mode=production"
+  }
+};
+</script>
+
+<script src="webpack.config.js.json">
+module.exports = {
+    entry: './src/main.js',
+    output: {
+        path: __dirname + '/public',
+        filename: 'bundle.js',
+    },
+    devServer: {
+        contentBase: __dirname + '/public'
+    },
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader',
+                }
+            }
+        ],
+    },
+};
+</script>
+
+<script src="/src/main.js">
+	alert("Opa");
+</script>
+
+{{========================================================================}}
+{{04 - Exercícios}}
+...
+{{########################################################################}}
+
+    {{03 – Async/await}}
+
+{{########################################################################}}
+...
+{{01 - Async/await}}
+...
+<script>
+	// PROMISE
+	const minhaPromise = () => new Promise((resolve, reject) => {
+	    setTimeout(() => { resolve('OK') }, 2000)
+	})
+
+	minhaPromise()
+	    .then(response => {
+	        console.log(response)
+	    })
+	    .catch(err => {
+
+	    });
+</script>
+<script>
+	// ASYNC / AWAIT
+	const minhaPromise = () => new Promise((resolve, reject) => {
+	    setTimeout(() => { resolve('OK') }, 2000)
+	})
+
+	// minhaPromise().then(response => ...)
+
+	// async function executePromise() {
+	//     console.log(await minhaPromise())
+	//     console.log(await minhaPromise())
+	//     console.log(await minhaPromise())
+	// }
+
+	const executePromise = async () => {
+	    console.log(await minhaPromise())
+	    console.log(await minhaPromise())
+	    console.log(await minhaPromise())
+	}
+
+	executePromise();
+</script>
+
+{{========================================================================}}
+{{02 - Configurando axios}}
+...
+<script>
+	import axios from 'axios'
+
+	class Api {
+	    static async getUserInfo(username) {
+	        try {
+	            const response = await axios.get(`https://api.github.com/users/${username}`)
+	            console.log(response)
+	        } catch (err) {
+	            console.warn('Erro na API')
+	        }
+	    }
+	}
+
+	Api.getUserInfo('wesgtox');
+	Api.getUserInfo('wesgtoxError');
+</script>
+{{========================================================================}}
+{{03 - Exercícios}}
+...
+{{########################################################################}}
+
+    {{04 – Aplicação com ES6+}}
+
+{{########################################################################}}
+...
+{{01 - Estrutura e estilos}}
+...
+Aplicação
+{{========================================================================}}
+{{02 - Adicionar repositórios}}
+...
+Aplicação 
+{{========================================================================}}
+{{03 - Render em tela}}
+...
+Aplicação 
+{{========================================================================}}
+{{04 - Buscando da API}}
+...
+Aplicação 
+{{========================================================================}}
+{{05 - Loading e error}}
+...
+Aplicação 
+{{########################################################################}}
